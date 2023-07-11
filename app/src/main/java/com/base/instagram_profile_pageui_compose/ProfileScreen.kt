@@ -4,16 +4,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -100,6 +103,9 @@ fun ProfileSection(
         ),
         othercount = 18
     )
+    Spacer(modifier=Modifier.height(25.dp))
+    ButtonsSection(modifier=Modifier.fillMaxWidth())
+    Spacer(modifier=Modifier.height(25.dp))
 }
 
 @Composable
@@ -227,5 +233,74 @@ fun ProfileDescription(
         }
 
 
+    }
+}
+
+@Composable
+fun ButtonsSection(
+    modifier: Modifier=Modifier
+){
+    val minwidth=95.dp
+    val height=30.dp
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier=modifier
+    ){
+      ActionButtons(
+          text = "Following",
+          icon=Icons.Default.KeyboardArrowDown,
+          modifier = Modifier.defaultMinSize(minwidth)
+              .height(height)
+      )
+        ActionButtons(
+            text = "Message",
+            modifier = Modifier.defaultMinSize(minwidth)
+                .height(height)
+        )
+        ActionButtons(
+            text = "Email",
+            modifier = Modifier.defaultMinSize(minwidth)
+                .height(height)
+        )
+        ActionButtons(
+            icon=Icons.Default.KeyboardArrowDown,
+            modifier = Modifier
+                .height(height)
+        )
+    }
+}
+
+@Composable
+fun ActionButtons(
+    modifier: Modifier=Modifier,
+    text:String?=null,
+    icon:ImageVector?=null
+){
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color.LightGray,
+                shape= RoundedCornerShape(5.dp)
+            )
+            .padding(6.dp)
+    ){
+
+        if(text!=null){
+            Text(
+                text=text,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp
+            )
+        }
+        if(icon!=null){
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint=Color.Black
+            )
+        }
     }
 }
