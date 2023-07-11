@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -80,10 +82,24 @@ fun ProfileSection(
         modifier = modifier.fillMaxWidth()
             .padding(horizontal = 20.dp)
     ){
-     RoundImage(painterResource(R.drawable.profile),modifier=Modifier.size(100.dp).weight(3f))
+     RoundImage(painterResource(R.drawable.messi),modifier=Modifier.size(100.dp).weight(3f))
         Spacer(modifier = modifier.width(16.dp))
         StatSection(modifier=modifier.weight(7f))
+
     }
+    ProfileDescription(
+        displayname = "GOAT",
+        description = "Playing Football makes me Feel ALive\n" +
+                "Vica Barca vica Cataluniya\n" +
+                "I was a kid with a Dream to be the best and i am living my dream\n"+
+                "Lets just enjoy the greatest game of all time",
+        url = "https://football.com",
+        followedby = listOf(
+            "Cristiano Ronaldo",
+            "Luka Modric"
+        ),
+        othercount = 18
+    )
 }
 
 @Composable
@@ -142,5 +158,74 @@ fun ProfileStat(
             text=text,
             fontWeight = FontWeight.Bold,
         )
+    }
+}
+
+@Composable
+fun ProfileDescription(
+    displayname:String,
+    description:String,
+    url:String,
+    followedby:List<String>,
+    othercount:Int,
+){
+    val letterspacingdata=0.5.sp
+    val lineheightdata=20.sp
+
+    Column (
+        modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+    ){
+        Text(
+            text = displayname,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = letterspacingdata,
+            lineHeight = lineheightdata
+        )
+
+        Text(
+            text = description,
+            letterSpacing = letterspacingdata,
+            lineHeight = lineheightdata
+        )
+
+        Text(
+            text = url,
+            color=Color(0XFF3D3D91),
+            letterSpacing = letterspacingdata,
+            lineHeight = lineheightdata
+        )
+
+        if(followedby.isNotEmpty()){
+            Text(
+                text = buildAnnotatedString {
+                    val boldstyle=SpanStyle(
+                        color=Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                    append("Followed By ")
+
+                    followedby.forEachIndexed{index: Int, name: String ->
+                        pushStyle(boldstyle)
+                        append(name)
+                        pop()
+                        if(index < followedby.size-1){
+                            append(" , ")
+                        }
+                    }
+
+                    if(othercount>2){
+                        append(" and ")
+                        pushStyle(boldstyle)
+                        append("$othercount others")
+                    }
+
+                },
+                letterSpacing = letterspacingdata,
+                lineHeight = lineheightdata
+            )
+        }
+
+
     }
 }
