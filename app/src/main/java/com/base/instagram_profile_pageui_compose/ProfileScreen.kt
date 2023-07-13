@@ -3,17 +3,22 @@ package com.base.instagram_profile_pageui_compose
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -79,8 +84,12 @@ fun TopBar(
 
 @Composable
 fun ProfileSection(
+
     modifier: Modifier=Modifier
 ){
+    var selectedtabindex by remember {
+        mutableStateOf(0)
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
@@ -108,6 +117,41 @@ fun ProfileSection(
     ButtonsSection(modifier=Modifier.fillMaxWidth())
     Spacer(modifier=Modifier.height(25.dp))
     HighlightSection()
+    Spacer(modifier=Modifier.height(10.dp))
+    PostTabView(
+        imagewithtext = listOf(
+            ImagewithText(
+            image = painterResource(R.drawable.grid),
+                text = "Posts"
+            ),
+            ImagewithText(
+                image = painterResource(R.drawable.video),
+                text = "reels"
+            ),
+            ImagewithText(
+                image = painterResource(R.drawable.instagram),
+                text = "IGTV"
+            ),
+            ImagewithText(
+                image = painterResource(R.drawable.avatar),
+            text = "Profile"
+        )
+        )
+    ){
+        selectedtabindex=it
+    }
+    when(selectedtabindex){
+        0 -> PostSection(
+            posts = listOf(
+                painterResource(R.drawable.m1),
+                painterResource(R.drawable.m2),
+                painterResource(R.drawable.m3),
+                painterResource(R.drawable.m4),
+                painterResource(R.drawable.m5),
+                painterResource(R.drawable.m6)
+            )
+        )
+    }
 }
 
 @Composable
@@ -372,4 +416,70 @@ fun HighlightItems(
         )
     }
 
+}
+
+@Composable
+fun PostTabView(
+imagewithtext:List<ImagewithText>,
+modifier: Modifier=Modifier,
+onTabSelected:(selectedIndex:Int) -> Unit
+){
+    var selectedTabIndex by remember {
+        mutableStateOf(0)
+    }
+    val inactivecolor=Color(0XFF777777)
+
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        backgroundColor = Color.Transparent,
+        contentColor = Color.Black,
+        modifier = modifier
+    ){
+        imagewithtext.forEachIndexed{index, items ->
+            Tab(
+                selected = selectedTabIndex==index,
+                selectedContentColor = Color.Black,
+                unselectedContentColor = inactivecolor,
+                onClick = {
+                    selectedTabIndex=index
+                    onTabSelected(index)
+                }
+            ){
+                Icon(
+                    painter = items.image,
+                    contentDescription = items.text,
+                    tint = if(selectedTabIndex==index) Color.Black else inactivecolor,
+                    modifier = modifier.padding(10.dp)
+                        .size(20.dp)
+
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun PostSection(
+    posts:List<Painter>,
+    modifier: Modifier=Modifier
+
+){
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier=modifier.scale(1.01f)
+    ){
+        items(posts.size){
+            Image(
+                painter = posts[it],
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = modifier.aspectRatio(1f)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black
+                    )
+            )
+        }
+    }
 }
