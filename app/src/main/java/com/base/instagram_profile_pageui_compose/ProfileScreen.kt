@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -85,7 +86,7 @@ fun ProfileSection(
         modifier = modifier.fillMaxWidth()
             .padding(horizontal = 20.dp)
     ){
-     RoundImage(painterResource(R.drawable.messi),modifier=Modifier.size(100.dp).weight(3f))
+     RoundImage(painterResource(R.drawable.profile),modifier=Modifier.size(100.dp).weight(3f))
         Spacer(modifier = modifier.width(16.dp))
         StatSection(modifier=modifier.weight(7f))
 
@@ -103,9 +104,10 @@ fun ProfileSection(
         ),
         othercount = 18
     )
-    Spacer(modifier=Modifier.height(25.dp))
+    Spacer(modifier=Modifier.height(10.dp))
     ButtonsSection(modifier=Modifier.fillMaxWidth())
     Spacer(modifier=Modifier.height(25.dp))
+    HighlightSection()
 }
 
 @Composable
@@ -116,10 +118,11 @@ fun RoundImage(
     Image(
         painter = image,
         contentDescription = "Profile Image",
+        contentScale = ContentScale.Crop,
         modifier = modifier.aspectRatio(1f,matchHeightConstraintsFirst = true)
             .border(
                 width = 1.dp,
-                color = Color.LightGray,
+                color = Color.Black,
                 shape = CircleShape
             )
             .padding(3.dp)
@@ -282,7 +285,7 @@ fun ActionButtons(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = Color.LightGray,
+                color = Color.Black,
                 shape= RoundedCornerShape(5.dp)
             )
             .padding(6.dp)
@@ -303,4 +306,70 @@ fun ActionButtons(
             )
         }
     }
+}
+
+
+@Composable
+fun HighlightSection(
+    modifier: Modifier=Modifier
+){
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth()
+    ){
+      HighlightItems(
+          image = painterResource(R.drawable.argentia),
+          text = "Argentina"
+      )
+        HighlightItems(
+            image = painterResource(R.drawable.barcelona),
+            text = "Barcelona"
+        )
+        HighlightItems(
+            image = painterResource(R.drawable.copa),
+            text = "Copa"
+        )
+        HighlightItems(
+            image = painterResource(R.drawable.psg),
+            text = "Psg"
+        )
+    }
+}
+
+
+@Composable
+fun HighlightItems(
+    image:Painter,
+    text: String,
+    modifier: Modifier=Modifier
+){
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ){
+
+        Image(
+            painter = image,
+            contentDescription = "highlight images",
+            contentScale = ContentScale.Crop,
+            modifier=modifier.size(80.dp)
+                .clip(CircleShape)
+                .border(
+                    width = 1.dp,
+                    color = Color.Black,
+                    shape = CircleShape
+                )
+        )
+        Spacer(modifier=modifier.height(4.dp))
+        Text(
+            text=text,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+    }
+
 }
